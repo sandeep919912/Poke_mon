@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 function App() {
 
   const [pokemones , setAllPokemones]= useState([])
+  const [data , setData]  = useState([])
   const [search , setSearch] = useState("")
   const [dropdown , setDropdown] = useState("")
   const [loading , setLoading] = useState(false)
@@ -32,12 +33,13 @@ function App() {
       sprites : obj.sprites.back_default
     }))
 
+    setData(allPokemones)
     setAllPokemones(allPokemones)
     
   }
 
 
-  useEffect(() => {
+  useEffect( () => {
     fetchData()
   }, []);
 
@@ -53,11 +55,18 @@ function App() {
     }
   }
 
-  const getPokeBySelect = ()=>{
-    let filteredPokes2 = pokemones.filter(pokemon => pokemon.types.map(type => type) == dropdown)
-    console.log(filteredPokes2)
-    setDropdown(filteredPokes2)
-  }
+  // const getPokeBySelect = ()=>{
+  //   let filteredPokes2 = pokemones.filter(pokemon => pokemon.types.map(type => type) == dropdown)
+  //   console.log(filteredPokes2)
+  //   setDropdown(filteredPokes2)
+  // }
+
+  const getPokeBySelect = () => {
+    let filteredPokes2 = data.filter(pokemon =>
+      pokemon.types.includes(dropdown.toLowerCase())
+    );
+    setAllPokemones(filteredPokes2); // not setDropdown
+  };
 
 
   return (
@@ -90,9 +99,9 @@ function App() {
           className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
         >
           <option>Select Type</option>
-          <option value="Grass">Grass</option>
-          <option value="Water">Water</option>
-          <option value="Fire">Fire</option>
+          <option value="grass">Grass</option>
+          <option value="water">Water</option>
+          <option value="fire">Fire</option>
         </select>
         <button
           onClick={getPokeBySelect}
@@ -105,8 +114,16 @@ function App() {
   </nav>
 
   {/* Pokemon Grid */}
+
+  {loading ? (
+  <div className="text-center mt-10 text-xl font-semibold text-orange-500 animate-pulse">
+    Loading...
+  </div>
+) : (
   <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+   
     {pokemones.map((pokemon) => (
+
       <div
         key={pokemon.id}
         className="flex flex-col items-center bg-white shadow-md rounded-lg p-4 hover:scale-105 transition-transform duration-200"
@@ -133,6 +150,8 @@ function App() {
       </div>
     ))}
   </div>
+)}
+  
 </div>
 
   )
