@@ -16,7 +16,6 @@ function App() {
     setLoading(true)
     let responce = await fetch("https://pokeapi.co/api/v2/pokemon?limit=150")
     let data = await responce.json()
-    setLoading(false)
     // console.log(data)
     let pokemonUrls = data.results.map(object=> object.url)
     // console.log(pokemonUrls)
@@ -35,6 +34,7 @@ function App() {
 
     setData(allPokemones)
     setAllPokemones(allPokemones)
+    setLoading(false)
     
   }
 
